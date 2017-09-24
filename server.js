@@ -10,16 +10,67 @@ app.get('/', function (req, res) {
 });
 
 
+var articles={
+	'article-one' : {
+		title : 'Article One',
+		heading : 'Article One',
+		date: '11-09-2017',
+		content: 'this is my first article'},
+	'article-two' : {
+		title : 'Article Two',
+		heading : 'Article Two',
+		date: '11-09-2017',
+		content: 'this is my second article'},
+	'article-three' : {
+		title : 'Article Three',
+		heading : 'Article Three',
+		date: '11-09-2017',
+		content: 'this is my Third article'}
+};
 
+function createTemplate (data){
+    var title=data.title;
+    var heading=data.heading;
+    var date=data.date;
+    var content=data.content;
+    
+    var HtmlTemplate=`
+                    <html>
+                    <head>
+                	<title>
+                    	    ${title}
+                    	</title>
+                    	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+                    	<link href="/ui/style.css" rel="stylesheet" />
+                    </head>
+                        
+                    <body>
+                        		<div class="container">
+                            		<div>
+                            			<a href="/">HOME</a>
 
+                            		</div>
+                            		   <hr/>
+                            			    <h3> 
+                            		    	${heading}
+                            		    	</h3>
+                                			<div>
+                                			${date}
+                                			</div>
+                                			<hr/>
+                                			<div>
+                            		    	${content}
+                            		    	</div><hr/>
+                            		    	                        			       
+                        			     
+                    </body>
+                    </html>
+                    `;
+                    return HtmlTemplate;}
 
-app.get('/:query',function(req,res){
-var Query = req.params.query;
-res.send('you requsted for '+ Query);
-});
-
-app.get('/article-one', function(req,res){
- res.sendFile(path.join(__dirname, 'ui', 'article-one.html'));
+app.get('/:articleName', function(req,res){
+ var articleName = req.params.articleName;
+ res.send(createTemplate(articles[articleName]));
 });
 
 app.get('/ui/main.js', function(req,res){
