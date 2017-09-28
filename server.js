@@ -1,3 +1,4 @@
+
 var express = require('express');
 var morgan = require('morgan');
 var path = require('path');
@@ -9,6 +10,11 @@ app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'index.html'));
 });
 
+var counter = 0;
+app.get('/counter',function(req,res){
+counter = counter + 1;
+res.send(counter.toString());
+});
 
 var articles={
 	'article-one' : {
@@ -25,8 +31,7 @@ var articles={
 		title : 'Article Three',
 		heading : 'Article Three',
 		date: '11-09-2017',
-		content: 'this is my Third article'}
-};
+		content: 'this is my Third article'}};
 
 function createTemplate (data){
     var title=data.title;
@@ -45,10 +50,12 @@ function createTemplate (data){
                     </head>
                         
                     <body>
-                        		<div class="container">
+                                 <div class="center">
+                                 <img src="/ui/madi.png" class="img-medium" height: 100px;/>
+                                 </div>
+                        		 <div class="container">
                             		<div>
                             			<a href="/">HOME</a>
-
                             		</div>
                             		   <hr/>
                             			    <h3> 
@@ -61,20 +68,45 @@ function createTemplate (data){
                                 			<div>
                             		    	${content}
                             		    	</div><hr/>
-                            		    	                        			       
+                            		    	<div>
+									            <input type="text" id="cmtBox" placeholder="enter the name"/>
+									            <button type="submit" id="cmtsubBtn">submit</button><br><hr/>
+									            comments<br>
+                                                <ul id="cmtList"></ul>
+									        </div>
+                            		   <script type="text/javascript" src="/ui/articleJs.js"></script> 	                        			       
                         			     
                     </body>
                     </html>
                     `;
-                    return HtmlTemplate;}
+                    return HtmlTemplate;
+                }
 
 app.get('/:articleName', function(req,res){
  var articleName = req.params.articleName;
  res.send(createTemplate(articles[articleName]));
 });
 
+var names = [];
+app.get('/submit-name/name', function(req,res){
+ var name = req.query.name;
+ names.push(name);
+ res.send(JSON.stringify(names));
+});
+
+var cmts = [];
+app.get('/submit-cmt/cmt', function(req,res){
+ var cmt = req.query.cmt;
+ cmts.push(cmt);
+ res.send(JSON.stringify(cmts));
+});
+
 app.get('/ui/main.js', function(req,res){
  res.sendFile(path.join(__dirname, 'ui', 'main.js'));
+});
+
+app.get('/ui/articleJs.js', function(req,res){
+ res.sendFile(path.join(__dirname, 'ui', 'articleJs.js'));
 });
 
 app.get('/ui/style.css', function (req, res) {
@@ -91,5 +123,5 @@ app.get('/ui/madi.png', function (req, res) {
 
 var port = 8080;
 app.listen(port, function () {
-  console.log(`IMAD course app listening on port ${port}!`);
+  console.log(`Your webapp is listening in the ${port}!`);
 });
