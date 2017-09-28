@@ -6,6 +6,7 @@ body {
 
 .center {
     text-align: center;
+
 }
 
 .text-big {
@@ -22,7 +23,8 @@ body {
 
 .container {
 	max-width: 900px;
-	margin: 200px;
+	margin: 100px;
+    padding-left: 100px
 	
 }
 
